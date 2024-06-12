@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Ejemplo básico</title>
+    <meta charset="UTF-8" />
+  </head>
+
+  <body>
+    <div style="display: flex; flex-direction: column; align-items: center; gap: 10px;">
+			<h2>Registro</h2>
+      <div>Nombre de Usuario:</div>
+      <input id="inputUser" placeholder="Usuario..." type="text" pattern="^[A-Za-z0-9._]+$" maxlength="20" required />
+      <div>Contraseña:</div>
+      <input id="inputPassword" placeholder="Contraseña..." type="text" />
+      <button id="btnRegister">Registrarse</button>
+      <div id="mensaje"></div>
+      <a href="./login.html">- Inicia sesión - </a>
+    </div>
+
+    <script type="module" src="./js/register.js"></script>
+  </body>
+</html>
