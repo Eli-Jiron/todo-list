@@ -64,20 +64,21 @@ export const renderTasks = (userTasks) => {
     });
 
     btnEdit.addEventListener("click", async () => {
-      renderModal(e.task, userTasks);
+      renderModal(divContent.id, divTask, userTasks);
     });
 
     btnDelete.addEventListener("click", async () => {
       if (e.id === divContent.id) {
         let index = userTasks.indexOf(e);
         userTasks.splice(index, 1);
+        taskList.removeChild(taskBorder);
         await putData(sessionId, { tasks: userTasks });
       }
     });
   });
 };
 
-const renderModal = (task, userTasks) => { //Función que renderiza un modal para editar tareas
+const renderModal = (id, task, userTasks) => { //Función que renderiza un modal para editar tareas
   //Etiquetas//
   let modal = document.createElement("div");
   let divBorder = document.createElement("div");
@@ -92,7 +93,7 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
   btnEdit.textContent = "Editar";
   btnClose.textContent = "X";
   inputEdit.placeholder = "Ingrese nueva tarea";
-  txtPreview.textContent = `Editar: "${task}"`;
+  txtPreview.textContent = `Editar: "${task.textContent}"`;
 
   //Clases//
   btnEdit.className = "btnModalEdit";
@@ -117,8 +118,9 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
     if (event.key === "Enter") {
       if (inputEdit.value.trim() !== "") { //Valida que el espacio no esté vacío
         userTasks.forEach((e) => {
-          if (task === e.task) {
+          if (id === e.id) {
             e.task = inputEdit.value;
+            task.textContent = inputEdit.value;
           }
         });
         await putData(sessionId, { tasks: userTasks });
@@ -130,8 +132,9 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
   btnEdit.addEventListener("click", async () => { //Función para editar la tarea al clicklear en el botón "Editar"
     if (inputEdit.value.trim() !== "") { //Valida que el espacio no esté vacío
       userTasks.forEach((e) => {
-        if (task === e.task) {
+        if (id === e.id) {
           e.task = inputEdit.value;
+          task.textContent = inputEdit.value;
         }
       });
       await putData(sessionId, { tasks: userTasks });
