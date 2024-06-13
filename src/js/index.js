@@ -1,4 +1,5 @@
 import { getData, putData, deleteData } from "./fetch.js";
+import { renderTasks } from "./render.js";
 
 let sessionId = sessionStorage.getItem("id");
 let titulo = document.getElementById("ttlo");
@@ -35,8 +36,10 @@ const loadUser = async () => {
   const promise = await getData();
   promise.forEach((e) => {
     if (e.id === sessionId) {
-      console.log(e);
       titulo.textContent = `${titulo.textContent}, ${e.user}`;
+      e.tasks.forEach(t => {
+        renderTasks(t);
+      });
     }
   });
 };
