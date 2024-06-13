@@ -49,9 +49,20 @@ export const renderTasks = (tasks) => {
     taskList.appendChild(borderTask);
 
     //Funciones//
-    checkbox.addEventListener("click", async () => {});
+    checkbox.addEventListener("click", async () => {
+      if (e.id === divContent.id) {
+        if (e.status) {
+          e.status = false;
+        } else {
+          e.status = true;
+        }
+      }
+      await putData(sessionId, { tasks: tasks });
+    });
 
-    btnEdit.addEventListener("click", async () => {});
+    btnEdit.addEventListener("click", async () => {
+
+    });
 
     btnDelete.addEventListener("click", async () => {
       if (e.id === divContent.id) {
