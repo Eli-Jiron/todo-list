@@ -14,6 +14,7 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
       promise.forEach((e) => {
         if (e.user === loginUser.value && e.password === loginPassword.value) {
           userReg = true;
+          sessionStorage.setItem("id", e.id);
         }
       });
       if (userReg) {
