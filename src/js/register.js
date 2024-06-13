@@ -25,7 +25,7 @@ document.getElementById("btnRegister").addEventListener("click", async () => {
           tasks: []
         };
         await postData(dataReg);
-        mensaje.textContent = "";
+        mensaje.textContent = "Se creó su cuenta";
       }
     }
   } else {

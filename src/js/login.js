@@ -8,7 +8,7 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
   let userReg = false;
   if (loginUser.value.trim() !== "" && loginPassword.value.trim() !== "") {
     if (!loginUser.checkValidity()) {
-      mensaje.textContent = "Solo caracteres validos ( A-Z, números, . o _ )";
+      mensaje.textContent = "Nombre de usuario no valido ( A-Z, números, . o _ )";
     } else {
       const promise = await getData();
       promise.forEach((e) => {

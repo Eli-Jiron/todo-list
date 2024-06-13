@@ -47,7 +47,7 @@ loadUser();
 const postTasks = async (userTasks, task) => {
   let newTask = {
     task: task,
-    status: false,
+    complete: false,
     id: generateUUID(),
   };
   userTasks.push(newTask);
