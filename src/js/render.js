@@ -1,12 +1,13 @@
 import { putData } from "./fetch.js";
+import { loadUser } from "./index.js";
 
 let sessionId = sessionStorage.getItem("id");
 let taskList = document.getElementById("taskList");
 
-export const renderTasks = (tasks) => {
-  tasks.forEach((e) => {
+export const renderTasks = (userTasks) => {
+  userTasks.forEach((e) => {
     //Etiquetas//
-    let borderTask = document.createElement("div");
+    let taskBorder = document.createElement("div");
     let divContent = document.createElement("div");
     let divTask = document.createElement("div");
     let divBtn = document.createElement("div");
@@ -17,25 +18,23 @@ export const renderTasks = (tasks) => {
     let btnEditImg = document.createElement("img");
 
     //Contenido//
-    btnDeleteImg.src =
-      "https://autumn.revolt.chat/attachments/wFIHXe0d91Rb_yLIbiSq9ZK9NyB-QpKEuTHIC1RxLB";
-    btnEditImg.src =
-      "https://autumn.revolt.chat/attachments/PsiPkuNbVmVeeaSwfPqXvap1luWr87prb5XP3GaYIb";
+    btnDeleteImg.src = "https://autumn.revolt.chat/attachments/wFIHXe0d91Rb_yLIbiSq9ZK9NyB-QpKEuTHIC1RxLB";
+    btnEditImg.src = "https://autumn.revolt.chat/attachments/PsiPkuNbVmVeeaSwfPqXvap1luWr87prb5XP3GaYIb";
     checkbox.type = "checkbox";
 
     //Clases y Ids//
     if (e.complete) {
-      checkbox.className = "unchecked";
-    } else {
       checkbox.className = "checked";
+    } else {
+      checkbox.className = "unchecked";
     }
-    borderTask.className = "borderTask";
+    taskBorder.className = "taskBorder";
     divContent.className = "divContent";
     divContent.id = e.id;
     btnDelete.className = "btnDelete";
     btnEdit.className = "btnEdit";
-    btnDeleteImg.className = "btnDeleteImg";
-    btnEditImg.className = "btnEditImg";
+    btnDeleteImg.className = "btnImg";
+    btnEditImg.className = "btnImg";
     divBtn.className = "divBtn";
 
     //Armado//
@@ -47,36 +46,39 @@ export const renderTasks = (tasks) => {
     divContent.appendChild(checkbox);
     divContent.appendChild(divTask);
     divContent.appendChild(divBtn);
-    borderTask.appendChild(divContent);
-    taskList.appendChild(borderTask);
+    taskBorder.appendChild(divContent);
+    taskList.appendChild(taskBorder);
 
     //Funciones//
     checkbox.addEventListener("click", async () => {
       if (e.id === divContent.id) {
         if (e.complete) {
           e.complete = false;
+          checkbox.className = "unchecked";
         } else {
           e.complete = true;
+          checkbox.className = "checked";
         }
       }
-      await putData(sessionId, { tasks: tasks });
+      await putData(sessionId, { tasks: userTasks });
     });
 
     btnEdit.addEventListener("click", async () => {
-      renderModal(e.task, tasks);
+      renderModal(divContent.id, divTask, userTasks);
     });
 
     btnDelete.addEventListener("click", async () => {
       if (e.id === divContent.id) {
-        let index = tasks.indexOf(e);
-        tasks.splice(index, 1);
-        await putData(sessionId, { tasks: tasks });
+        let index = userTasks.indexOf(e);
+        userTasks.splice(index, 1);
+        taskList.removeChild(taskBorder);
+        await putData(sessionId, { tasks: userTasks });
       }
     });
   });
 };
 
-const renderModal = (task, userTasks) => { //Función que renderiza un modal para editar tareas
+const renderModal = (id, task, userTasks) => { //Función que renderiza un modal para editar tareas
   //Etiquetas//
   let modal = document.createElement("div");
   let divBorder = document.createElement("div");
@@ -91,10 +93,10 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
   btnEdit.textContent = "Editar";
   btnClose.textContent = "X";
   inputEdit.placeholder = "Ingrese nueva tarea";
-  txtPreview.textContent = `Editar: ${task}`;
+  txtPreview.textContent = `Editar: "${task.textContent}"`;
 
   //Clases//
-  btnEdit.className = "btnEdit";
+  btnEdit.className = "btnModalEdit";
   inputEdit.className = "inputEdit";
   btnClose.className = "btnClose";
   modal.className = "modal";
@@ -116,11 +118,13 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
     if (event.key === "Enter") {
       if (inputEdit.value.trim() !== "") { //Valida que el espacio no esté vacío
         userTasks.forEach((e) => {
-          if (task === e.task) {
+          if (id === e.id) {
             e.task = inputEdit.value;
+            task.textContent = inputEdit.value;
           }
         });
         await putData(sessionId, { tasks: userTasks });
+        document.body.removeChild(modal);
       }
     }
   });
@@ -128,15 +132,17 @@ const renderModal = (task, userTasks) => { //Función que renderiza un modal par
   btnEdit.addEventListener("click", async () => { //Función para editar la tarea al clicklear en el botón "Editar"
     if (inputEdit.value.trim() !== "") { //Valida que el espacio no esté vacío
       userTasks.forEach((e) => {
-        if (task === e.task) {
+        if (id === e.id) {
           e.task = inputEdit.value;
+          task.textContent = inputEdit.value;
         }
       });
       await putData(sessionId, { tasks: userTasks });
+      document.body.removeChild(modal);
     }
   });
 
   btnClose.addEventListener("click", function () { //Cierra el modal
     document.body.removeChild(modal);
   });
-}
+};

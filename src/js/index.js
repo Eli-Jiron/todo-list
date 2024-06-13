@@ -8,9 +8,11 @@ document.getElementById("inputTask").addEventListener("keydown", async (event) =
     if (event.key === "Enter") {
       if (inputTask.value.trim() !== "") {
         const promise = await getData();
-        promise.forEach((e) => {
+        promise.forEach(async (e) => {
           if (e.id === sessionId) {
-            postTasks(e.tasks, inputTask.value);
+            await postTasks(e.tasks, inputTask.value);
+            taskList.innerHTML = "";
+            await loadUser();
           }
         });
       } else {
@@ -22,9 +24,11 @@ document.getElementById("inputTask").addEventListener("keydown", async (event) =
 document.getElementById("btnTask").addEventListener("click", async () => {
   if (inputTask.value.trim() !== "") {
     const promise = await getData();
-    promise.forEach((e) => {
+    promise.forEach(async (e) => {
       if (e.id === sessionId) {
-        postTasks(e.tasks, inputTask.value);
+        await postTasks(e.tasks, inputTask.value);
+        taskList.innerHTML = "";
+        await loadUser();
       }
     });
   } else {
@@ -32,13 +36,13 @@ document.getElementById("btnTask").addEventListener("click", async () => {
   }
 });
 
-const loadUser = async () => {
+export const loadUser = async () => {
   const promise = await getData();
   promise.forEach((e) => {
     if (e.id === sessionId) {
       console.log(e);
-      titulo.textContent = `${titulo.textContent}, ${e.user}`;
-      renderTasks(e.tasks)
+      titulo.textContent = `Bienvenido, ${e.user}`;
+      renderTasks(e.tasks);
     }
   });
 };
@@ -56,10 +60,10 @@ const postTasks = async (userTasks, task) => {
 
 const generateUUID = () => {
   let d = new Date().getTime();
-  let uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
-      let r = (d + Math.random() * 16) % 16 | 0;
-      d = Math.floor(d / 16);
-      return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+  let uuid = "xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    let r = (d + Math.random() * 16) % 16 | 0;
+    d = Math.floor(d / 16);
+    return (c == "x" ? r : (r & 0x3) | 0x8).toString(16);
   });
   return uuid;
 };
