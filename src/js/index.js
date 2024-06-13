@@ -32,12 +32,12 @@ document.getElementById("btnTask").addEventListener("click", async () => {
   }
 });
 
-const loadUser = async () => {
+export const loadUser = async () => {
   const promise = await getData();
   promise.forEach((e) => {
     if (e.id === sessionId) {
       console.log(e);
-      titulo.textContent = `${titulo.textContent}, ${e.user}`;
+      titulo.textContent = `Bienvenido, ${e.user}`;
       renderTasks(e.tasks)
     }
   });
