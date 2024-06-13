@@ -6,7 +6,21 @@
   <title>Document</title>
 </head>
 <body>
-  <h1>Hola mundo</h1>
+  <h1 id="ttlo">Bienvenido</h1>
+
+  <div>
+    <div>
+      <div style="font-size: 30px;">Agregar tarea</div>
+      <div style="font-size: 15px;">maximo 50 caracteres</div>
+    </div>
+    <input type="text" id="inputTask" placeholder="Ingrese una tarea..." maxlength="50" required>
+    <button id="btnTask">Agregar</button>
+  </div>
+
+  <div id="taskList"></div>
+
   <a href="./register.html">hola</a>
+
+  <script type="module" src="./js/index.js"></script>
 </body>
 </html>
