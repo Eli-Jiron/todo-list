@@ -6,7 +6,7 @@ let titulo = document.getElementById("ttlo");
 
 document.getElementById("inputTask").addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
-      if (inputTask.value !== "") {
+      if (inputTask.value.trim() !== "") {
         const promise = await getData();
         promise.forEach((e) => {
           if (e.id === sessionId) {
@@ -20,7 +20,7 @@ document.getElementById("inputTask").addEventListener("keydown", async (event) =
   });
 
 document.getElementById("btnTask").addEventListener("click", async () => {
-  if (inputTask.value !== "") {
+  if (inputTask.value.trim() !== "") {
     const promise = await getData();
     promise.forEach((e) => {
       if (e.id === sessionId) {
@@ -62,4 +62,4 @@ const generateUUID = () => {
       return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
   });
   return uuid;
-}
+};

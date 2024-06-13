@@ -1,3 +1,6 @@
+import { putData } from "./fetch.js";
+
+let sessionId = sessionStorage.getItem("id");
 let taskList = document.getElementById("taskList");
 
 export const renderTasks = (tasks) => {
@@ -44,5 +47,18 @@ export const renderTasks = (tasks) => {
     divContent.appendChild(divBtn);
     borderTask.appendChild(divContent);
     taskList.appendChild(borderTask);
+
+    //Funciones//
+    checkbox.addEventListener("click", async () => {});
+
+    btnEdit.addEventListener("click", async () => {});
+
+    btnDelete.addEventListener("click", async () => {
+      if (e.id === divContent.id) {
+        let index = tasks.indexOf(e);
+        tasks.splice(index, 1);
+        await putData(sessionId, { tasks: tasks });
+      }
+    });
   });
 };
