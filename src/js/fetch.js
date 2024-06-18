@@ -11,6 +11,17 @@ export const getData = async () => {
   }
 };
 
+//Metodo GET para los datos de usuario
+export const getUserData = async (id) => {
+  try {
+    const response = await fetch(apiUrl + id);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 //Metodo POST
 export const postData = async (userData) => {
   try {
