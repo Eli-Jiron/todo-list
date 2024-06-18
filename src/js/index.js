@@ -1,4 +1,4 @@
-import { getData, putData, deleteData } from "./fetch.js";
+import { getUserData, putData, deleteData } from "./fetch.js";
 import { renderTasks } from "./render.js";
 
 let sessionId = sessionStorage.getItem("id");
@@ -7,14 +7,10 @@ let titulo = document.getElementById("ttlo");
 document.getElementById("inputTask").addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
       if (inputTask.value.trim() !== "") {
-        const promise = await getData();
-        promise.forEach(async (e) => {
-          if (e.id === sessionId) {
-            await postTasks(e.tasks, inputTask.value);
-            taskList.innerHTML = "";
-            await loadUser();
-          }
-        });
+        const userData = await getUserData(sessionId);
+        await postTasks(userData.tasks, inputTask.value);
+        taskList.innerHTML = "";
+        await loadUser();
       } else {
         console.log("ingrese texto");
       }
@@ -23,28 +19,20 @@ document.getElementById("inputTask").addEventListener("keydown", async (event) =
 
 document.getElementById("btnTask").addEventListener("click", async () => {
   if (inputTask.value.trim() !== "") {
-    const promise = await getData();
-    promise.forEach(async (e) => {
-      if (e.id === sessionId) {
-        await postTasks(e.tasks, inputTask.value);
-        taskList.innerHTML = "";
-        await loadUser();
-      }
-    });
+    const userData = await getUserData(sessionId);
+    await postTasks(userData.tasks, inputTask.value);
+    taskList.innerHTML = "";
+    await loadUser();
   } else {
     console.log("ingrese texto");
   }
 });
 
 export const loadUser = async () => {
-  const promise = await getData();
-  promise.forEach((e) => {
-    if (e.id === sessionId) {
-      console.log(e);
-      titulo.textContent = `Bienvenido, ${e.user}`;
-      renderTasks(e.tasks);
-    }
-  });
+  const userData = await getUserData(sessionId);
+  console.log(userData);
+  titulo.textContent = `Bienvenido, ${userData.user}`;
+  renderTasks(userData.tasks);
 };
 loadUser();
 

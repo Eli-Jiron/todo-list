@@ -1,5 +1,4 @@
 import { putData } from "./fetch.js";
-import { loadUser } from "./index.js";
 
 let sessionId = sessionStorage.getItem("id");
 let taskList = document.getElementById("taskList");

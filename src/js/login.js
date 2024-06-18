@@ -19,9 +19,7 @@ document.getElementById("btnLogin").addEventListener("click", async () => {
       });
       if (userReg) {
         mensaje.textContent = "Redireccionando...";
-        setTimeout(() => {
-          location.href = "index.hmtl";
-        }, 1000);
+        location.href = "index.hmtl";
       } else {
         mensaje.textContent = "El usuario o contraseña no coinciden";
       }
