@@ -1,3 +1,4 @@
+import Swal from 'sweetalert2'
 import { getUserData, putData, deleteData } from "./fetch.js";
 import { renderTasks } from "./render.js";
 
@@ -7,8 +8,7 @@ let titulo = document.getElementById("ttlo");
 document.getElementById("inputTask").addEventListener("keydown", async (event) => {
     if (event.key === "Enter") {
       if (inputTask.value.trim() !== "") {
-        const userData = await getUserData(sessionId);
-        await postTasks(userData.tasks, inputTask.value);
+        await postTasks(inputTask.value);
         taskList.innerHTML = "";
         await loadUser();
       } else {
@@ -19,8 +19,7 @@ document.getElementById("inputTask").addEventListener("keydown", async (event) =
 
 document.getElementById("btnTask").addEventListener("click", async () => {
   if (inputTask.value.trim() !== "") {
-    const userData = await getUserData(sessionId);
-    await postTasks(userData.tasks, inputTask.value);
+    await postTasks(inputTask.value);
     taskList.innerHTML = "";
     await loadUser();
   } else {
@@ -29,21 +28,31 @@ document.getElementById("btnTask").addEventListener("click", async () => {
 });
 
 export const loadUser = async () => {
-  const userData = await getUserData(sessionId);
-  console.log(userData);
-  titulo.textContent = `Bienvenido, ${userData.user}`;
-  renderTasks(userData.tasks);
+  if (sessionId !== null) {
+    const userData = await getUserData(sessionId);
+    console.log(userData);
+    titulo.textContent = `Bienvenido, ${userData.user}`;
+    renderTasks(userData.tasks);
+  } else {
+    Swal.fire({
+      titleText: "Por favor registrese o inicie sesión",
+      icon: "warning",
+    }).then(() => {
+      location.href = "register.html";
+    });
+  }
 };
 loadUser();
 
-const postTasks = async (userTasks, task) => {
+const postTasks = async (task) => {
+  const userData = await getUserData(sessionId);
   let newTask = {
     task: task,
     complete: false,
     id: generateUUID(),
   };
-  userTasks.push(newTask);
-  await putData(sessionId, { tasks: userTasks });
+  userData.tasks.push(newTask);
+  await putData(sessionId, { tasks: userData.tasks });
 };
 
 const generateUUID = () => {
